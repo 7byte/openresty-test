@@ -38,37 +38,21 @@ function releaseConn(mysqlConn)
         if not ok then
             mysqlConn:close()
             ok = false
-            db_type = db_type + mysql_type
             err = "MySQL.Error ( "..(err or "null").." ) "
         end
     end 
     return ok, db_type, err
 end
 
-function response_success_jsonp(info, callback)
-    local nsp               = {}
-    nsp["status"]           = 0
-    nsp["data"]             = info
-    local rsp               = JSON.encode(nsp)
-    if not callback or callback == ngx.null then
-        ngx.header.content_type = "application/json;charset=utf8"
-        ngx.say(rsp)
-    else
-        ngx.header.content_type = "application/javascript;charset=utf8"
-        ngx.say(callback,"(", rsp,");")
-    end
-    ngx.exit(ngx.HTTP_OK)
-    return
-end
-
 local mysql, err = getMysql()
 if not mysql then
     ngx.say(err)
 else
-    local sql = "SELECT help_topic_id, name, help_category_id, example, url FROM help_topic"
+    local sql = "SELECT * FROM help_topic"
     local res1, err, errno, sqlstate = mysql:query(sql)
-    ngx.log(ngx.ERR, "get_reused_times: "..mysql:get_reused_times())
+    -- ngx.log(ngx.ERR, "get_reused_times: "..mysql:get_reused_times())
     if not res1 then
+        ngx.log(ngx.ERR, "mysql error: ", err)
         ngx.say(JSON.encode({"query failed!"}))
     else
         ngx.say(JSON.encode(res1))
