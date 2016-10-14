@@ -35,11 +35,10 @@ function releaseConn(mysqlConn)
         while err == "again" do
             res, err, errno, sqlstate = mysqlConn:read_result()
         end
-        -- local ok, err = mysqlConn:set_keepalive(0, 1000)
+        local ok, err = mysqlConn:set_keepalive(0, 1000)
         if not ok then
             mysqlConn:close()
             ok = false
-            db_type = db_type
             err = "MySQL.Error ( "..(err or "null").." ) "
         end
     end 
