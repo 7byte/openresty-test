@@ -1,0 +1,7 @@
+ngx.say("begin")
+ngx.say("ngx.var.remote_addr: ", ngx.var.remote_addr)
+ngx.say("ngx.var.host: ", ngx.var.host)
+ngx.say("ngx.req.raw_header(): ", ngx.req.raw_header())
+ngx.say("ngx.var.binary_remote_addr: ", ngx.var.binary_remote_addr)
+ngx.say("end")
+ngx.log(ngx.ERR, "testProxyIP")
